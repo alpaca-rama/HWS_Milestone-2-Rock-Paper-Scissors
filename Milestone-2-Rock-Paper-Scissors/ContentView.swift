@@ -44,9 +44,9 @@ struct ContentView: View {
                 VStack {
                     Text("LOSE TO")
                         .foregroundColor(.red)
-                        .font(.title.bold())
+                        .font(.title2.bold())
                     Text(possibleMoves[appChoice])
-                        .font(.largeTitle.bold())
+                        .font(.title.bold())
                 }
             }
             Spacer()
@@ -56,7 +56,8 @@ struct ContentView: View {
                         playerChoice(number)
                     } label: {
                         Text(possibleMoves[number])
-                            .font(.largeTitle)
+                            .font(.largeTitle.bold())
+                            .foregroundColor(appWinOrLoseText == "Win" ? .green : .red)
                     }
                 }
             }
