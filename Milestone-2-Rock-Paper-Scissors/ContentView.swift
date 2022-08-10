@@ -19,6 +19,7 @@ struct ContentView: View {
     let possibleMoves = ["Rock", "Paper", "Scissors"]
     let winningMoves = ["Paper", "Scissors", "Rock"]
     let losingMoves = ["Scissors", "Rock", "Paper"]
+    let emojiMoves = ["👊🏼", "✋🏼", "✌🏼"]
     
     var appWinOrLoseText: String {
         var condition: String
@@ -34,6 +35,8 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
+            LinearGradient(gradient: Gradient(colors: [.red, .orange]), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea(.all)
             VStack {
                 Text("Question \(question) of \(numberOfQuestions)")
                     .font(.system(size: 25))
@@ -44,16 +47,16 @@ struct ContentView: View {
                         Text("BEAT")
                             .foregroundColor(.green)
                             .font(.title.bold())
-                        Text(possibleMoves[appChoice])
-                            .font(.largeTitle.bold())
+                        Text(emojiMoves[appChoice])
+                            .font(.system(size: 80))
                     }
                 } else if appWinOrLoseText == "Lose" {
                     VStack {
                         Text("LOSE TO")
                             .foregroundColor(.red)
                             .font(.title2.bold())
-                        Text(possibleMoves[appChoice])
-                            .font(.title.bold())
+                        Text(emojiMoves[appChoice])
+                            .font(.system(size: 80))
                     }
                 }
                 Spacer()
@@ -62,13 +65,19 @@ struct ContentView: View {
                         Button {
                             playerChoice(number)
                         } label: {
-                            Text(possibleMoves[number])
-                                .font(.largeTitle.bold())
+                            Text(emojiMoves[number])
+                                .font(.system(size: 80))
                                 .foregroundColor(appWinOrLoseText == "Win" ? .green : .red)
                         }
                     }
                 }
+                
             }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 20)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .padding()
         }
         .alert("You scored: \(playerScore) points", isPresented: $questionsAlert) {
             Button("no") { }
@@ -97,18 +106,16 @@ struct ContentView: View {
             }
         }
         
-        next()
+        nextQuestion()
     }
     
     func correctChoice() {
         playerScore += 1
-        question += 1
         print("CORRECT")
     }
     
     func incorrectScore() {
         playerScore -= 1
-        question += 1
         print("INCORRECT")
         
         if playerScore < 0 { playerScore = 0 }
@@ -117,14 +124,14 @@ struct ContentView: View {
     // future functionality, if wanted
     func draw() {
         playerScore += 0
-        question += 1
         print("DRAW")
     }
     
-    func next() {
+    func nextQuestion() {
         if question < numberOfQuestions {
             appChoice = Int.random(in: 0...2)
             appWinOrLose = Bool.random()
+            question += 1
         } else {
             questionsAlert = true
         }
@@ -132,7 +139,8 @@ struct ContentView: View {
     
     func reset() {
         playerScore = 0
-        question = 1
+        question = 0
+        nextQuestion()
     }
 }
 
